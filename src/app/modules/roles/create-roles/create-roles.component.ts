@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SIDEBAR } from '../../../config/config';
 import { RolesService } from '../service/roles.service';
@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CreateRolesComponent {
 
+  @Output() RoleC: EventEmitter<any> = new EventEmitter();
   name: string = '';
 
   isLoading: any;
@@ -58,7 +59,14 @@ export class CreateRolesComponent {
     }
 
     this.rolesService.registerRole(data).subscribe((resp:any) => {
-      console.log(resp)
+      // console.log(resp)
+      if(resp.message == 403) {
+        this.toastr.error("Error", resp.message_text)
+      } else {
+        this.toastr.success("Exito", "Rol creado correctamente")
+        this.RoleC.emit(resp.role);
+        this.modal.close();
+      }
     })
   }
 }

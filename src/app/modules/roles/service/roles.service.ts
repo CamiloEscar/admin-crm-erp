@@ -30,4 +30,16 @@ export class RolesService {
       finalize(() => this.isLoadingSubject.next(false))
     )
   }
+
+  listRoles(page = 1, search: string = '') {
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});
+    let URL = URL_SERVICIO+"/roles?page="+page+"&search="+search;
+    return this.http.get(URL, {
+      headers: headers
+    }).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    )
+
+  }
 }

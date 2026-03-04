@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateRolesComponent } from '../create-roles/create-roles.component';
+import { RolesService } from '../service/roles.service';
 
 @Component({
   selector: 'app-list-roles',
@@ -9,8 +10,14 @@ import { CreateRolesComponent } from '../create-roles/create-roles.component';
 })
 export class ListRolesComponent {
 
+  search: string = '';
+  ROLES: any = [];
+  isLoading$: any;
+  totalPages: number = 0;
+  currentPage: number = 0;
   constructor(
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    public rolesService: RolesService,
   ) {
 
   }
@@ -18,10 +25,28 @@ export class ListRolesComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-
+    this.isLoading$ = this.rolesService.isLoading$;
+    this.listRoles();
   }
 
   createRol(){
     const modalRef = this.modalService.open(CreateRolesComponent, { centered: true, size: 'md'});
+
+    modalRef.componentInstance.RoleC.subscribe((role:any) => {
+      this.ROLES.unshift(role)
+    })
+  }
+
+  listRoles(page: number = 1){
+    this.rolesService.listRoles(page, this.search).subscribe((resp: any) => {
+      console.log(resp)
+      this.ROLES = resp.roles
+      this.totalPages = resp.total;
+      this.currentPage = page;
+    })
+  }
+
+  loadPage($event: any) {
+    this.listRoles($event);
   }
 }
