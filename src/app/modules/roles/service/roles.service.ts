@@ -40,6 +40,27 @@ export class RolesService {
     }).pipe(
       finalize(() => this.isLoadingSubject.next(false))
     )
+  }
 
+  updateRole(ID_ROLE:string, data: any) {
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});
+    let URL = URL_SERVICIO+"/roles/"+ID_ROLE;
+    return this.http.put(URL, data, {
+      headers: headers
+    }).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    )
+  }
+
+  deleteRole(ID_ROLE:string) {
+    this.isLoadingSubject.next(true);
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});
+    let URL = URL_SERVICIO+"/roles/"+ID_ROLE;
+    return this.http.delete(URL, {
+      headers: headers
+    }).pipe(
+      finalize(() => this.isLoadingSubject.next(false))
+    )
   }
 }
