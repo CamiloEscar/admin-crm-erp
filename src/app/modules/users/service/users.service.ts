@@ -42,6 +42,17 @@ export class UsersService {
       )
     }
 
+    configAll() {
+      this.isLoadingSubject.next(true);
+      let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});
+      let URL = URL_SERVICIO+"/users/config";
+      return this.http.get(URL, {
+        headers: headers
+      }).pipe(
+        finalize(() => this.isLoadingSubject.next(false))
+      )
+    }
+
     updateUser(ID_USER:string, data: any) {
       this.isLoadingSubject.next(true);
       let headers = new HttpHeaders({'Authorization': 'Bearer ' + this.authservice.token});

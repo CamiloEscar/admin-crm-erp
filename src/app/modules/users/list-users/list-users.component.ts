@@ -16,6 +16,8 @@ search: string = '';
   isLoading$: any;
   totalPages: number = 0;
   currentPage: number = 0;
+
+  roles:any = [];
   constructor(
     public modalService: NgbModal,
     public usersService: UsersService,
@@ -28,22 +30,31 @@ search: string = '';
     //Add 'implements OnInit' to the class.
     this.isLoading$ = this.usersService.isLoading$;
     this.listUsers();
+    this.configAll();
   }
 
   createUser(){
     const modalRef = this.modalService.open(CreateUserComponent, { centered: true, size: 'md'});
+    modalRef.componentInstance.roles = this.roles;
 
-    modalRef.componentInstance.RoleC.subscribe((user:any) => {
+    modalRef.componentInstance.UserC.subscribe((user:any) => {
       this.USERS.unshift(user)
     })
   }
 
   listUsers(page: number = 1){
     this.usersService.listUsers(page, this.search).subscribe((resp: any) => {
-      console.log(resp)
+      // console.log(resp)
       this.USERS = resp.users
       this.totalPages = resp.total;
       this.currentPage = page;
+    })
+  }
+
+  configAll() {
+    this.usersService.configAll().subscribe((resp: any) => {
+      // console.log(resp)
+      this.roles = resp.roles
     })
   }
 
