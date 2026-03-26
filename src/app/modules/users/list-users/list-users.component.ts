@@ -65,8 +65,9 @@ search: string = '';
   editUser(USER:any) {
   const modalRef = this.modalService.open(EditUserComponent, { centered: true, size: 'md'});
   modalRef.componentInstance.USER_SELECTED = USER;
+  modalRef.componentInstance.roles = this.roles;
 
-    modalRef.componentInstance.RoleE.subscribe((user:any) => {
+    modalRef.componentInstance.UserE.subscribe((user:any) => {
       let INDEX = this.USERS.findIndex((user: any) => user.id == USER.id)
       if(INDEX != -1) {
         this.USERS[INDEX] = user;
@@ -78,7 +79,7 @@ search: string = '';
   const modalRef = this.modalService.open(DeleteUserComponent, { centered: true, size: 'md'});
   modalRef.componentInstance.USER_SELECTED = USER;
 
-    modalRef.componentInstance.RoleD.subscribe((user:any) => {
+    modalRef.componentInstance.UserD.subscribe((user:any) => {
       let INDEX = this.USERS.findIndex((user: any) => user.id == USER.id)
       if(INDEX != -1) {
         this.USERS.splice(INDEX, 1);

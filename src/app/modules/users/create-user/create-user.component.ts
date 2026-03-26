@@ -81,6 +81,7 @@ export class CreateUserComponent {
     }
     if(this.password && this.password != this.password_repeat){
       this.toastr.error("Validacion", "Las contraseñas deben coincidir")
+      return false;
     }
 
     let formData = new FormData();
